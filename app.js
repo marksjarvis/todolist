@@ -5,6 +5,10 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 
+const srvr = process.env.N1_KEY; 
+const srvrCred = process.env.N1_SECRET; 
+const mongoDB = "mongodb+srv://" + srvr + ":" + srvrCred + "@cluster0.jil02ie.mongodb.net/todolistDB";
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -17,7 +21,7 @@ main().catch(err => console.log(err));
 
 async function main() {
   mongoose.set('strictQuery', false);
-  await mongoose.connect('mongodb+srv://markjarvis:MMXzGhv8HldwPueh@cluster0.jil02ie.mongodb.net/todolistDB');
+  await mongoose.connect(mongoDB);
 };
 
 //create an 'items' SCHEMA
@@ -161,6 +165,6 @@ app.post("/delete", function (req, res) {
 
 });
 
-app.listen(3000, function () {
-  console.log("Server started on port 3000");
+app.listen(process.env.PORT || 3000, function () {
+  console.log("Server is running on port 3000.");
 });
