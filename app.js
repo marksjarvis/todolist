@@ -5,9 +5,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 
-const srvr = process.env.N1_KEY; 
-const srvrCred = process.env.N1_SECRET; 
-const mongoDB = "mongodb+srv://" + srvr + ":" + srvrCred + "@cluster0.jil02ie.mongodb.net/todolistDB";
+require('dotenv').config();
 
 const app = express();
 
@@ -16,13 +14,25 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-//connect to MongoDB by specifying port to access MongoDB server
-main().catch(err => console.log(err));
+//MongoDB server
+
+main().catch((err) => console.log(err));
 
 async function main() {
-  mongoose.set('strictQuery', false);
-  await mongoose.connect(mongoDB);
+
+await mongoose.connect(process.env.ATLAS_URL,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 };
+
+/*
+mongoose.connect(process.env.ATLAS_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+*/
 
 //create an 'items' SCHEMA
 const itemsSchema = new mongoose.Schema({
